@@ -45,7 +45,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-app.secret_key = 'cdffeeqsweeff566y6777' # Set a secret key for sessions
+ # Set a secret key for sessions
 
 
 # App related
@@ -149,41 +149,39 @@ def not_found(error):
 
 
 @app.route('/', methods=['GET', 'POST'])
-def home_page():
+def index():
 
-    if session['username'] == 'admin' :
-         
-        conn = mysql.connector.connect(host=DB_HOSTNAME, user=DB_USERNAME, password=DB_PASSWORD, database=DB_NAME)    
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM photos")
-        results = cursor.fetchall()
-
-        items = []
-        for item in results:
-            photo = {}
-            photo['PhotoID'] = item[0]
-            photo['CreationTime'] = item[1]
-            photo['Title'] = item[2]
-            photo['Description'] = item[3]
-            photo['Tags'] = item[4]
-            photo['URL'] = item[5]
-            items.append(photo)
-        conn.close()
-
-        print (items)
-        return render_template('index.html', photos=items)
-        # return render_template('index.html', photos=items)
-        
-    else:
-        print("Unregistered user")
+    if not session.get('username') :
         return redirect(url_for('login'))
+         
+    conn = mysql.connector.connect(host=DB_HOSTNAME, user=DB_USERNAME, password=DB_PASSWORD, database=DB_NAME)    
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM photos")
+    results = cursor.fetchall()
+
+    items = []
+    for item in results:
+        photo = {}
+        photo['PhotoID'] = item[0]
+        photo['CreationTime'] = item[1]
+        photo['Title'] = item[2]
+        photo['Description'] = item[3]
+        photo['Tags'] = item[4]
+        photo['URL'] = item[5]
+        items.append(photo)
+    conn.close()
+
+    print (items)
+    return render_template('index.html', photos=items)
+    # return render_template('index.html', photos=items)
+    
 
 
 # TODO implementing ...
 @app.route('/add', methods=['GET', 'POST'])
 def add_photo():
     
-    if session['username'] != 'admin' :
+    if not session.get('username') :
         return redirect(url_for('login'))
    
     if request.method == 'POST':    
@@ -236,7 +234,7 @@ def add_photo():
 @app.route('/<int:photoID>', methods=['GET'])
 def view_photo(photoID):
     
-    if not session['username'] == 'admin' :
+    if not session.get('username') :
         return redirect(url_for('login'))
         
     conn = mysql.connector.connect(host=DB_HOSTNAME, user=DB_USERNAME, password=DB_PASSWORD, database=DB_NAME)
@@ -273,7 +271,7 @@ def view_photo(photoID):
 @app.route('/search/', methods=['GET'])
 def search_page():
     
-    if not session['username'] == 'admin' :
+    if not session.get('username') :
         return redirect(url_for('login'))
         
     query = request.args.get('query', None)
@@ -311,4 +309,5 @@ def search_page():
 
 
 if __name__ == '__main__':
+    app.secret_key = 'cdffeeqsweeff566y6777'
     app.run(debug=True, host="0.0.0.0", port=APP_PORT)
