@@ -58,8 +58,8 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 BASE_URL = f"http://localhost:{APP_PORT}/media/"
 
 # Access code console
-AWS_ACCESS_KEY = "AKIAUQ3KAUNZ4T3B5324"
-AWS_SECRET_KEY = "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"
+AWS_ACCESS_KEY = "AKIAUQ3KAUNZQJT5JXMJEDDDD"
+AWS_SECRET_KEY = "GWRWg/BUnYOKVmYF9W+dOmddZ4JbDqBomuDPL3kAddddd"
 REGION = "us-east-1"
 
 # Bucket info

@@ -67,7 +67,11 @@
                   <a href="/{{p.PhotoID}}">{{p.Title}}</a>
                 </h4>
                 <span class="theme-portfolio-subtitle">
-                  {{p.CreationTime}}</span>
+                  {{p.CreationTime}}
+                </span>
+                <span class="theme-portfolio-subtitle">
+                  <a href="{{p.URL}}" download>Download</a>
+                </span>
               </div>
             </div>
             {% endfor %}
